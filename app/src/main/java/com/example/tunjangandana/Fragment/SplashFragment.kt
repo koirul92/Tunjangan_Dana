@@ -26,14 +26,17 @@ class SplashFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val sharedPreference = context?.getSharedPreferences(SHARED_PREFERENCES,Context.MODE_PRIVATE)
 
-        val userShared = sharedPreference?.getString("username","")
+        val userShared = sharedPreference?.getString("email","")
 
         Handler(Looper.getMainLooper()).postDelayed({
             if (userShared == ""){
                 val direct = SplashFragmentDirections.actionSplashFragmentToLoginFragment()
                 findNavController().navigate(direct)
+            }else{
+                val direct = SplashFragmentDirections.actionSplashFragmentToHomeFragment()
+                findNavController().navigate(direct)
             }
-        },2000)
+        },5000)
     }
 
 }

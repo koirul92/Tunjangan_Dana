@@ -46,7 +46,6 @@ class LoginFragment : Fragment() {
                     }else{
                         val editor = sharedPreferences.edit()
                         editor.putString("email",email)
-                        editor.putString("password",password)
                         editor.apply()
                         val direct = LoginFragmentDirections.actionLoginFragmentToHomeFragment()
                         findNavController().navigate(direct)

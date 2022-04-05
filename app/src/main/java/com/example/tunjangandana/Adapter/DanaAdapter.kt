@@ -10,9 +10,11 @@ import com.example.tunjangandana.databinding.DanaListBinding
 import com.example.tunjangandana.room.BobotDatabase
 import com.example.tunjangandana.room.Dana
 import kotlinx.coroutines.GlobalScope
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.async
 
-class DanaAdapter(private val listDana: List<Dana>):RecyclerView.Adapter<DanaAdapter.ViewHolder>() {
+class DanaAdapter (private val listDana: List<Dana>):RecyclerView.Adapter<DanaAdapter.ViewHolder>() {
+
     class ViewHolder(val binding : DanaListBinding):RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -32,9 +34,8 @@ class DanaAdapter(private val listDana: List<Dana>):RecyclerView.Adapter<DanaAda
                 dialogFragment.show(activity.supportFragmentManager, null)
             }*/
             ivDelete.setOnClickListener{
-                AlertDialog.Builder(it.context).setPositiveButton("Ya"){ p0, p1->
+                AlertDialog.Builder(it.context).setPositiveButton("Ya"){p0,p1->
                     val mDb =BobotDatabase.getInstance(holder.itemView.context)
-
                     GlobalScope.async {
                         val result = mDb?.danaDao()?.deleteDana(listDana[position])
 

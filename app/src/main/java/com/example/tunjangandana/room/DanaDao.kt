@@ -1,13 +1,14 @@
 package com.example.tunjangandana.room
 
 import androidx.room.*
+import androidx.room.OnConflictStrategy.REPLACE
 
 @Dao
 interface DanaDao {
     @Query("SELECT * FROM Dana")
     fun getAllDana():List<Dana>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = REPLACE)
     fun insertDana(dana: Dana):Long
 
     @Update
