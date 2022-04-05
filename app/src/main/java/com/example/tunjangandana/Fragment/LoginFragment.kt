@@ -42,10 +42,24 @@ class LoginFragment : Fragment() {
                 activity?.runOnUiThread {
                     if (Login ==null){
                         Toast.makeText(context, "Username atau Password Anda Salah", Toast.LENGTH_SHORT).show()
+                    }else{
+                        val editor = sharedPreferences.edit()
+                        editor.putString("email",email)
+                        editor.putString("password",password)
+                        editor.apply()
                     }
                 }
             }
+
         }
+        binding.btnRegister.setOnClickListener {
+        }
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }
