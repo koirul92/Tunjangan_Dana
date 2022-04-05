@@ -2,6 +2,7 @@ package com.example.tunjangandana.room
 
 import androidx.room.*
 
+@Dao
 interface DanaDao {
     @Query("SELECT * FROM Dana")
     fun getAllDana():List<Dana>

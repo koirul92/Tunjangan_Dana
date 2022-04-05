@@ -48,7 +48,7 @@ class LoginFragment : Fragment() {
                         editor.putString("email",email)
                         editor.putString("password",password)
                         editor.apply()
-                        val direct = LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
+                        val direct = LoginFragmentDirections.actionLoginFragmentToHomeFragment()
                         findNavController().navigate(direct)
                     }
                 }
