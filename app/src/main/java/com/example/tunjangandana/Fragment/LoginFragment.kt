@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.example.tunjangandana.MainActivity
 import com.example.tunjangandana.R
 import com.example.tunjangandana.databinding.FragmentLoginBinding
@@ -47,12 +48,16 @@ class LoginFragment : Fragment() {
                         editor.putString("email",email)
                         editor.putString("password",password)
                         editor.apply()
+                        val direct = LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
+                        findNavController().navigate(direct)
                     }
                 }
             }
 
         }
         binding.btnRegister.setOnClickListener {
+            val direct = LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
+            findNavController().navigate(direct)
         }
 
     }

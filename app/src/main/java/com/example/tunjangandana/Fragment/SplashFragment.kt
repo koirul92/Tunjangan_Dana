@@ -30,6 +30,8 @@ class SplashFragment : Fragment() {
 
         Handler(Looper.getMainLooper()).postDelayed({
             if (userShared == ""){
+                val direct = SplashFragmentDirections.actionSplashFragmentToLoginFragment()
+                findNavController().navigate(direct)
             }
         },2000)
     }
