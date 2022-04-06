@@ -61,13 +61,12 @@ class RegisterFragment : Fragment() {
                 }else-> {
                 lifecycleScope.launch(Dispatchers.IO) {
                     val result = mDb?.userDao()?.insertUser(regist)
-                    runBlocking {
+                    activity?.runOnUiThread {
                         if (result != 0.toLong()){
-                            Toast.makeText(activity, "Pendaftaran berhasil", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Pendaftaran berhasil", Toast.LENGTH_SHORT).show()
                         }else{
-                            Toast.makeText(activity, "Pendaftaran gagal", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Pendaftaran gagal", Toast.LENGTH_SHORT).show()
                         }
-                        onStop()
                     }
                 }
                 val direct = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()

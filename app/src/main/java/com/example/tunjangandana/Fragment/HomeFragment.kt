@@ -41,10 +41,7 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-        fetchData()
-    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,7 +54,7 @@ class HomeFragment : Fragment() {
 
         fetchData()
 
-        binding.tvWelcome.text = "Welcome ${sharedPreference?.getString("name",null)}"
+        binding.tvWelcome.text = "Welcome ${sharedPreference?.getString("email",null)}"
 
 
         binding.fabAdd.setOnClickListener {
@@ -178,6 +175,11 @@ class HomeFragment : Fragment() {
             }
 
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fetchData()
     }
 
 
