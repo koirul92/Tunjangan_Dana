@@ -1,5 +1,6 @@
 package com.example.tunjangandana.Fragment
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -80,19 +81,54 @@ class HomeFragment : Fragment() {
 
     }
 
-    private fun fetchData(){
+    fun fetchData(){
         lifecycleScope.launch(Dispatchers.IO) {
             val myDb = myDatabase?.danaDao()
             val listStudent = myDb?.getAllDana()
 
             activity?.runOnUiThread {
                 listStudent?.let {
-                    adapter = DanaAdapter(it)
+                    adapter = DanaAdapter(it, delete = {
+                        Dana -> androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                        .setPositiveButton("Iya"){_,_ ->
+                            val mDb = BobotDatabase.getInstance(requireContext())
+                            lifecycleScope.launch(Dispatchers.IO){
+                                val result = mDb?.danaDao()?.deleteDana(Dana)
+                                activity?.runOnUiThread{
+                                    if(result != 0){
+                                        Toast.makeText(
+                                            requireContext(),
+                                            "${Dana.keterangan} berhasil dihapus",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    } else {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            "${Dana.keterangan} gagal dihapus",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
+                                fetchData()
+                            }
+                        }
+                        .setNegativeButton("Tidak"){ dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .setMessage("Apakah anda yakin ingin menghapus ${Dana.keterangan}")
+                        .setTitle("Konfirmasi Hapus")
+                        .create()
+                        .show()
+                    }, edit = {})
                     binding.rvDana.adapter = adapter
                 }
             }
 
         }
+    }
+
+    private fun editData(){
+        lifecycleScope
     }
 
 

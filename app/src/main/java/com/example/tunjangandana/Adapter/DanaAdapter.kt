@@ -11,9 +11,14 @@ import com.example.tunjangandana.room.BobotDatabase
 import com.example.tunjangandana.room.Dana
 import kotlinx.coroutines.GlobalScope
 import androidx.lifecycle.lifecycleScope
+import com.example.tunjangandana.Fragment.HomeFragment
 import kotlinx.coroutines.async
 
-class DanaAdapter (private val listDana: List<Dana>):RecyclerView.Adapter<DanaAdapter.ViewHolder>() {
+class DanaAdapter (
+    private val listDana: List<Dana>,
+    private val delete: (Dana)->Unit,
+    private val edit: (Dana)->Unit ):RecyclerView.Adapter<DanaAdapter.ViewHolder>() {
+
 
     class ViewHolder(val binding : DanaListBinding):RecyclerView.ViewHolder(binding.root)
 
@@ -27,32 +32,16 @@ class DanaAdapter (private val listDana: List<Dana>):RecyclerView.Adapter<DanaAd
             tvKeterangan.text = listDana[position].keterangan
             tvGoals.text = listDana[position].danaGoals.toString()
             tvDanaMonth.text = listDana[position].danaMonth.toString()
-
-            /*ivEdit.setOnClickListener {
+/*
+            ivEdit.setOnClickListener {
                 val activity = it.context as MainActivity
                 val dialogFragment = EditFragment()
                 dialogFragment.show(activity.supportFragmentManager, null)
             }*/
-            ivDelete.setOnClickListener{
-                AlertDialog.Builder(it.context).setPositiveButton("Ya"){p0,p1->
-                    val mDb =BobotDatabase.getInstance(holder.itemView.context)
-                    GlobalScope.async {
-                        val result = mDb?.danaDao()?.deleteDana(listDana[position])
-
-                        (holder.itemView.context as MainActivity).runOnUiThread {
-                            if (result!=0){
-                                Toast.makeText(it.context,"Data${listDana[position].keterangan} berhasil dihapus",Toast.LENGTH_LONG).show()
-                            }else{
-                                Toast.makeText(it.context,"Data${listDana[position].keterangan} Gagal dihapus",Toast.LENGTH_LONG).show()
-                            }
-                        }
-                    }
-                }.setNegativeButton("Tidak"
-                ){p0,p1 ->
-                    p0.dismiss()
-                }
-                    .setMessage("Apakah Anda Yakin ingin menghapus data ${listDana[position].keterangan}").setTitle("Konfirmasi Hapus").create().show()
+            ivDelete.setOnClickListener {
+                delete.invoke(listDana[position])
             }
+
 
         }
     }
