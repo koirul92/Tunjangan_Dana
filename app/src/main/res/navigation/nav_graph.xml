@@ -46,6 +46,9 @@
         <action
             android:id="@+id/action_homeFragment_to_addFragment"
             app:destination="@id/addFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_splashFragment"
+            app:destination="@id/splashFragment" />
     </fragment>
     <dialog
         android:id="@+id/addFragment"

@@ -2,6 +2,7 @@ package com.example.tunjangandana.Fragment
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.tunjangandana.Adapter.DanaAdapter
 import com.example.tunjangandana.MainActivity
 import com.example.tunjangandana.databinding.FragmentHomeBinding
@@ -73,9 +75,13 @@ class HomeFragment : Fragment() {
             }
 
             dialog.show(parentFragmentManager,"dialog")
-
-//            val action = ListScheduleFragmentDirections.actionListScheduleFragmentToFormFragment2()
-//            it.findNavController().navigate(action)
+            }
+        binding.tvLogout.setOnClickListener {
+            val editor: SharedPreferences.Editor = sharedPreference.edit()
+            editor.clear()
+            editor.apply()
+            val direct = HomeFragmentDirections.actionHomeFragmentToSplashFragment()
+            findNavController().navigate(direct)
         }
 
 
