@@ -3,6 +3,8 @@ package com.example.tunjangandana.Fragment
 import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,10 +15,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.tunjangandana.Adapter.DanaAdapter
 import com.example.tunjangandana.MainActivity
+import com.example.tunjangandana.databinding.EditDialogBinding
 import com.example.tunjangandana.databinding.FragmentHomeBinding
 import com.example.tunjangandana.room.BobotDatabase
+import com.example.tunjangandana.room.Dana
+import com.example.tunjangandana.room.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class HomeFragment : Fragment() {
 
@@ -48,13 +54,11 @@ class HomeFragment : Fragment() {
         val sharedPreference = requireContext()
             .getSharedPreferences(MainActivity.SHARED_PREFERENCES, Context.MODE_PRIVATE)
 
-//        binding.button.setOnClickListener {
-//            val editor = sharedPreference.edit()
-//            editor.clear()
-//            editor.apply()
-//        }
 
         fetchData()
+
+        binding.tvWelcome.text = "Welcome ${sharedPreference?.getString("name",null)}"
+
 
         binding.fabAdd.setOnClickListener {
 
@@ -90,10 +94,10 @@ class HomeFragment : Fragment() {
     fun fetchData(){
         lifecycleScope.launch(Dispatchers.IO) {
             val myDb = myDatabase?.danaDao()
-            val listStudent = myDb?.getAllDana()
+            val listDana = myDb?.getAllDana()
 
             activity?.runOnUiThread {
-                listStudent?.let {
+                listDana?.let {
                     adapter = DanaAdapter(it, delete = {
                         Dana -> androidx.appcompat.app.AlertDialog.Builder(requireContext())
                         .setPositiveButton("Iya"){_,_ ->
@@ -104,13 +108,13 @@ class HomeFragment : Fragment() {
                                     if(result != 0){
                                         Toast.makeText(
                                             requireContext(),
-                                            "${Dana.keterangan} berhasil dihapus",
+                                            "Data ${Dana.keterangan} berhasil dihapus",
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     } else {
                                         Toast.makeText(
                                             requireContext(),
-                                            "${Dana.keterangan} gagal dihapus",
+                                            "Data ${Dana.keterangan} gagal dihapus",
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     }
@@ -125,16 +129,55 @@ class HomeFragment : Fragment() {
                         .setTitle("Konfirmasi Hapus")
                         .create()
                         .show()
-                    }, edit = {})
+                    }, edit = { dana ->
+                        val dialogBinding = EditDialogBinding.inflate(LayoutInflater.from(requireContext()))
+                        val dialogBuilder = androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                        dialogBuilder.setView(dialogBinding.root)
+                        val dialog = dialogBuilder.create()
+                        dialog.setCancelable(false)
+                        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        dialogBinding.tvId.text = "${dana.id}"
+                        dialogBinding.etKeterangan.setText("${dana.keterangan}")
+                        dialogBinding.etGoals.setText("${dana.danaGoals}")
+                        dialogBinding.btnSave.setOnClickListener{
+                            val mDB = BobotDatabase.getInstance(requireContext())
+                            val id: Int = dialogBinding.tvId.text.toString().toInt()
+                            val keterangan: String = dialogBinding.etKeterangan.text.toString()
+                            val goals: Int = dialogBinding.etGoals.text.toString().toInt()
+                            val month: Int = dialogBinding.etMonth.text.toString().toInt()
+                            val permonth: Int = goals/month
+                            val data = Dana(
+                                id,keterangan,goals,permonth
+                            )
+                            lifecycleScope.launch(Dispatchers.IO){
+                                val result = mDB?.danaDao()?.updateDana(data)
+                                runBlocking(Dispatchers.Main){
+                                    if (result != 0){
+                                        Toast.makeText(
+                                            requireContext(),
+                                            "Pengutang ${data.keterangan} Berhasil Di Update!",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        fetchData()
+                                        dialog.dismiss()
+                                    } else {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            "Pengutang ${data.keterangan} Gagal Di update!",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        dialog.dismiss()
+                                    }
+                                }
+                            }
+                        }
+                        dialog.show()
+                    })
                     binding.rvDana.adapter = adapter
                 }
             }
 
         }
-    }
-
-    private fun editData(){
-        lifecycleScope
     }
 
 

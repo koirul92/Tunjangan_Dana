@@ -6,14 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.tunjangandana.R
 import com.example.tunjangandana.databinding.FragmentRegisterBinding
 import com.example.tunjangandana.room.BobotDatabase
 import com.example.tunjangandana.room.User
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 
 
 class RegisterFragment : Fragment() {
@@ -45,22 +44,22 @@ class RegisterFragment : Fragment() {
             val regist = User(null,name,email,password)
             when {
                 name.isNullOrEmpty() -> {
-                    binding.materialName.error = "Username kamu belum diisi"
+                    binding.materialName.error = "Kolom nama harus diisi"
                 }
                 email.isNullOrEmpty() -> {
-                    binding.materialEmail.error = "Email kamu belum diisi"
+                    binding.materialEmail.error = "Kolom email harus diisi"
                 }
                 password.isNullOrEmpty() -> {
-                    binding.materialPassword.error = "Password kamu belum diisi"
+                    binding.materialPassword.error = "Kolom password harus diisi"
                 }
                 confirmPassword.isNullOrEmpty() -> {
-                    binding.materialConfirmPassword.error = "Kamu perlu konfirmasi password"
+                    binding.materialConfirmPassword.error = "Kolom konfirmasi password harus diisi"
                 }
                 password.lowercase() != confirmPassword.lowercase() -> {
-                    binding.materialConfirmPassword.error = "Password tidak sama"
+                    binding.materialConfirmPassword.error = "Password dan konfirmasi password tidak sama"
                     binding.etConfirmPassword.setText("")
                 }else-> {
-                    GlobalScope.async {
+                lifecycleScope.launch(Dispatchers.IO) {
                     val result = mDb?.userDao()?.insertUser(regist)
                     runBlocking {
                         if (result != 0.toLong()){
@@ -69,11 +68,11 @@ class RegisterFragment : Fragment() {
                             Toast.makeText(activity, "Pendaftaran gagal", Toast.LENGTH_SHORT).show()
                         }
                         onStop()
-                        }
                     }
-                    val direct = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
-                    findNavController().navigate(direct)
                 }
+                val direct = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
+                findNavController().navigate(direct)
+            }
             }
         }
     }

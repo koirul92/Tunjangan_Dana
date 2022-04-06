@@ -7,13 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.tunjangandana.MainActivity
 import com.example.tunjangandana.R
 import com.example.tunjangandana.databinding.FragmentLoginBinding
 import com.example.tunjangandana.room.BobotDatabase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding?=null
@@ -38,7 +41,7 @@ class LoginFragment : Fragment() {
             val email = binding.etEmail.text.toString()
             val password = binding.etPassword.text.toString()
 
-            GlobalScope.async {
+            lifecycleScope.launch(Dispatchers.IO){
                 val Login = mDb?.userDao()?.login(email,password)
                 activity?.runOnUiThread {
                     if (Login ==null){

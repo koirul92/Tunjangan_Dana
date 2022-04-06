@@ -36,7 +36,7 @@ class AddFragment (private val listDana: (Dana)->Unit) : DialogFragment() {
                     val month: Int = binding.etMonth.text.toString().toInt()
                     val permonth: Int = goals/month
                     val dana = Dana(
-                        null, binding.etKeterangan.text.toString(), goals.toString(),permonth.toString()
+                        null, binding.etKeterangan.text.toString(), goals,permonth
                     )
                     listDana(dana)
                     dialog?.dismiss()

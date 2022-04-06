@@ -1,18 +1,10 @@
 package com.example.tunjangandana.Adapter
 
-import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.tunjangandana.MainActivity
 import com.example.tunjangandana.databinding.DanaListBinding
-import com.example.tunjangandana.room.BobotDatabase
 import com.example.tunjangandana.room.Dana
-import kotlinx.coroutines.GlobalScope
-import androidx.lifecycle.lifecycleScope
-import com.example.tunjangandana.Fragment.HomeFragment
-import kotlinx.coroutines.async
 
 class DanaAdapter (
     private val listDana: List<Dana>,
@@ -32,12 +24,9 @@ class DanaAdapter (
             tvKeterangan.text = listDana[position].keterangan
             tvGoals.text = listDana[position].danaGoals.toString()
             tvDanaMonth.text = listDana[position].danaMonth.toString()
-/*
             ivEdit.setOnClickListener {
-                val activity = it.context as MainActivity
-                val dialogFragment = EditFragment()
-                dialogFragment.show(activity.supportFragmentManager, null)
-            }*/
+                edit.invoke(listDana[position])
+            }
             ivDelete.setOnClickListener {
                 delete.invoke(listDana[position])
             }
