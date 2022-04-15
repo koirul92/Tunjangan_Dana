@@ -60,7 +60,7 @@ class HomeFragment : Fragment() {
 
             val dialog = AddFragment{
                 lifecycleScope.launch(Dispatchers.IO) {
-                    val result = myDatabase?.danaDao()?.insertDana(it)
+                    val result = danaRepository.insertDana(it)
                     activity?.runOnUiThread {
                         if (result == (0).toLong()){
                             Toast.makeText(context,
@@ -99,7 +99,7 @@ class HomeFragment : Fragment() {
                         .setPositiveButton("Iya"){_,_ ->
                             val mDb = BobotDatabase.getInstance(requireContext())
                             lifecycleScope.launch(Dispatchers.IO){
-                                val result = mDb?.danaDao()?.deleteDana(Dana)
+                                val result = danaRepository.deleteDana(Dana)
                                 activity?.runOnUiThread{
                                     if(result != 0){
                                         Toast.makeText(
@@ -146,7 +146,7 @@ class HomeFragment : Fragment() {
                                 id,keterangan,goals,permonth
                             )
                             lifecycleScope.launch(Dispatchers.IO){
-                                val result = mDB?.danaDao()?.updateDana(data)
+                                val result = danaRepository.updateDana(data)
                                 runBlocking(Dispatchers.Main){
                                     if (result != 0){
                                         Toast.makeText(
