@@ -36,6 +36,6 @@ class SplashFragment : Fragment() {
                 val direct = SplashFragmentDirections.actionSplashFragmentToHomeFragment()
                 findNavController().navigate(direct)
             }
-        },10000)
+        },5000)
     }
 }

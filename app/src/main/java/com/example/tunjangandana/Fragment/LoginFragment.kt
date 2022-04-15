@@ -13,6 +13,8 @@ import com.example.tunjangandana.MainActivity
 import com.example.tunjangandana.R
 import com.example.tunjangandana.databinding.FragmentLoginBinding
 import com.example.tunjangandana.room.BobotDatabase
+import com.example.tunjangandana.room.DanaRepository
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -45,7 +47,7 @@ class LoginFragment : Fragment() {
                 val Login = mDb?.userDao()?.login(email,password)
                 activity?.runOnUiThread {
                     if (Login ==null){
-                        Toast.makeText(context, "Username atau Password Anda Salah", Toast.LENGTH_SHORT).show()
+                        Snackbar.make(it,"Username atau Password anda salah",Snackbar.LENGTH_LONG).show()
                     }else{
                         val editor = sharedPreferences.edit()
                         editor.putString("email",email)

@@ -30,8 +30,6 @@ class DanaAdapter (
             ivDelete.setOnClickListener {
                 delete.invoke(listDana[position])
             }
-
-
         }
     }
 

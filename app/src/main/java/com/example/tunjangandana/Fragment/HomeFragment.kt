@@ -17,9 +17,7 @@ import com.example.tunjangandana.Adapter.DanaAdapter
 import com.example.tunjangandana.MainActivity
 import com.example.tunjangandana.databinding.EditDialogBinding
 import com.example.tunjangandana.databinding.FragmentHomeBinding
-import com.example.tunjangandana.room.BobotDatabase
-import com.example.tunjangandana.room.Dana
-import com.example.tunjangandana.room.User
+import com.example.tunjangandana.room.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -29,7 +27,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private var myDatabase: BobotDatabase? = null
     private val binding get() = _binding!!
-
+    private val repository :DanaRepository?=null
     private var adapter:DanaAdapter? = null
 
     override fun onCreateView(
@@ -88,10 +86,10 @@ class HomeFragment : Fragment() {
 
     }
 
+
     fun fetchData(){
         lifecycleScope.launch(Dispatchers.IO) {
-            val myDb = myDatabase?.danaDao()
-            val listDana = myDb?.getAllDana()
+            val listDana = repository?.getAllDana()
 
             activity?.runOnUiThread {
                 listDana?.let {
