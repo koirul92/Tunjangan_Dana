@@ -1,16 +1,20 @@
 package com.example.tunjangandana.room
 
-class DanaRepositoryImpl (private val danaDao:DanaDao):DanaRepository{
-    override fun getAllDana(): List<Dana> {
-        return danaDao.getAllDana()
+import android.content.Context
+
+class DanaRepositoryImpl (private val context: Context){
+
+    private val myDatabase = BobotDatabase.getInstance(context)
+    suspend fun getAllDana(): List<Dana>? {
+        return myDatabase?.danaDao()?.getAllDana()
     }
-    override suspend fun insertDana(dana: Dana): Long {
-        return danaDao.insertDana(dana = dana)
+    suspend fun insertDana(dana: Dana): Long? {
+        return myDatabase?.danaDao()?.insertDana(dana = dana)
     }
-    override suspend fun updateDana(dana: Dana): Int {
-        return danaDao.updateDana(dana = dana)
+    suspend fun updateDana(dana: Dana): Int? {
+        return myDatabase?.danaDao()?.updateDana(dana = dana)
     }
-    override suspend fun deleteDana(dana: Dana): Int {
-        return danaDao.deleteDana(dana = dana)
+    suspend fun deleteDana(dana: Dana): Int? {
+        return myDatabase?.danaDao()?.deleteDana(dana = dana)
     }
 }

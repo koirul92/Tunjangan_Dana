@@ -27,7 +27,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private var myDatabase: BobotDatabase? = null
     private val binding get() = _binding!!
-    private val repository :DanaRepository?=null
+    lateinit var danaRepository: DanaRepositoryImpl
     private var adapter:DanaAdapter? = null
 
     override fun onCreateView(
@@ -45,6 +45,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         myDatabase = BobotDatabase.getInstance(requireContext())
+        danaRepository = DanaRepositoryImpl(requireContext())
 
         val sharedPreference = requireContext()
             .getSharedPreferences(MainActivity.SHARED_PREFERENCES, Context.MODE_PRIVATE)
@@ -89,7 +90,7 @@ class HomeFragment : Fragment() {
 
     fun fetchData(){
         lifecycleScope.launch(Dispatchers.IO) {
-            val listDana = repository?.getAllDana()
+            val listDana = danaRepository.getAllDana()
 
             activity?.runOnUiThread {
                 listDana?.let {
